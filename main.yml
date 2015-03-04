@@ -1,0 +1,8 @@
+---
+## PLAYBOOK TO INSTALL AND CONFIGURE NTP ON REDHAT/ DEBIAN SYSTEMS
+
+- hosts: all
+  roles:
+     - ntp
+
+

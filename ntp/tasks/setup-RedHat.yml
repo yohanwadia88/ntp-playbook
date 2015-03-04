@@ -1,0 +1,3 @@
+---
+- name: Ensure NTP packages are installed (RedHat).
+  yum: name={{ ntp_package }} state=installed

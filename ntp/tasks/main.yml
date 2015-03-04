@@ -1,0 +1,29 @@
+---
+# tasks file for ntp
+
+- name: Include OS-specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Set the correct timezone
+  file: src=/usr/share/zoneinfo/{{ ntp_timezone }}  dest=/etc/localtime state=link force=yes
+
+- name: Configure NTP
+  template: src={{ item }} dest={{ ntp_config }}
+  with_first_found:
+   - "../templates/{{ ansible_distribution }}-{{ ansible_distribution_version }}.ntp.conf.j2"
+   - "../templates/{{ ansible_distribution }}.ntp.conf.j2"
+   - "../templates/{{ ansible_os_family }}.ntp.conf.j2"
+   - "../templates/ntp.conf.j2"
+
+#- name: Restart NTP
+#  service: name={{ ntp_service }} state=restarted
+
+- name: Force NTP update
+  shell: "service {{ ntp_service }} stop && ntpdate -s {{ ntpdate_server }} && service {{ ntp_service }} start"
+

@@ -1,0 +1,6 @@
+---
+# defaults file for ntp
+
+ntp_timezone: America/Denver
+ntpdate_server: pool.ntp.org
+
